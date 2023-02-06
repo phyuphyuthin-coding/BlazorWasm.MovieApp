@@ -1,0 +1,73 @@
+﻿@page "/"
+@inject HttpClient _httpClient
+@inject IJSRuntime _JsRuntime
+
+ <div class = "wrapper">
+        <!-- logo -->
+        <div class = "logo">
+            <div class = "container">
+                <p>Movie<span>Corn.</span></p>
+            </div>
+        </div>
+        <!-- end of logo -->
+        <!-- search container -->
+        <div class = "search-container">
+            <div class = "search-element">
+                <h3>Search Movie:</h3>
+                <input value="@searchTerm"
+                           @onchange="@((ChangeEventArgs __e) => searchTerm = 
+                               __e.Value.ToString())" @onfocus="@hasFocus" @onkeydown="@Enter"  class = "form-control" placeholder="Search Movie Title ..." id = "movie-search-box">
+                <div class = "search-list @(CheckForm(_formCase))" id = "search-list">
+                    @if (model != null && model.Search.Count > 0)
+                    {
+                        foreach (var item in model.Search)
+                        {
+                            string moviePoster = item.Poster != "N/A" ? item.Poster : "/theme/image_not_found.png";
+                            <div data-id="@item.imdbID" class="search-list-item" @onclick="() => Detail(item.imdbID)">
+                                <div class="search-item-thumbnail">
+                                    <img src="@(moviePoster)">
+                                </div>
+                                <div class="search-item-info">
+                                    <h3>@(item.Title)</h3>
+                                    <p>@(item.Year)</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- end of search container -->
+
+        <!-- result container -->
+        <div class = "container">
+            <div class = "result-container">
+                <div class="result-grid" id="result-grid">
+                    @if (movie != null)
+                    {
+                        <!-- movie information here -->
+                        <div class = "movie-poster">
+                            <img src = "@movie.Poster" alt = "movie poster">
+                        </div>
+                        <div class = "movie-info">
+                            <h3 class = "movie-title">@movie.Title</h3>
+                            <ul class = "movie-misc-info">
+                                <li class = "year">Year: @movie.Year</li>
+                                <li class = "rated">Ratings: @movie.Rated</li>
+                                <li class = "released">Released: @movie.Released</li>
+                            </ul>
+                            <p class = "genre"><b>Genre:</b> @movie.Genre</p>
+                            <p class = "writer"><b>Writer:</b> @movie.Writer</p>
+                            <p class = "actors"><b>Actors: </b> @movie.Actors</p>
+                            <p class = "plot"><b>Plot:</b> @movie.Plot</p>
+                            <p class = "language"><b>Language:</b> @movie.Language</p>
+                            <p class = "awards"><b><i class = "fas fa-award"></i></b> @movie.Awards</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- end of result container -->
+    </div>
+
+
